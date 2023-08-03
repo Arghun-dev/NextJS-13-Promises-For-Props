@@ -9,7 +9,7 @@ import FoodList from "@/app/_components/FoodList";
 
 export default function Home() {
   // Good
-  const foodsRes = fetch("http://localhost:3001/api/foods", {
+  const foodsRes = fetch("http://localhost:3000/api/foods", {
     cache: "no-cache",
   }).then((res) => res.json());
 

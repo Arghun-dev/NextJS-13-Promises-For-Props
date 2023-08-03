@@ -93,11 +93,11 @@ export async function getData() {
 
 and now if you want to import this `getData` function or any function from this module into a client component, it will throw a build error.
 
-The other pattern that I want to talk about is using `third-party` packages. These packages can be UI libraries can be theme providers or authentication providers, which they often depend on react hooks and react context to share that state or concern throughout your application. And because these server components and app router is something new, most of these third-party packages don't support react server components or they do not have 'use-client' directive and you can not use them inside your react server components. You can still use them inside your own client components that have that 'use-client' directive up top and that support any react hooks and functionality. But you can not use them directly inside your react server components.
+The other pattern that I want to talk about is using `third-party` packages. These packages can be UI libraries can be theme providers or authentication providers, which they often depend on react hooks and react context to share that state or concern throughout your application. And because these server components and app router is something new, most of these third-party packages don't support react server components or they do not have 'use client' directive and you can not use them inside your react server components. You can still use them inside your own client components that have that 'use client' directive up top and that support any react hooks and functionality. But you can not use them directly inside your react server components.
 
 So, the workaround is to wrap those specific packages components coming from these libraries inside of your own client so therefore they can have access to react hooks, context states.
 
-For example if you import a component from a third party UI library like antd, MUI, ... that doesn't yet support the app router or this `use-client` directive, you can import `use-client` inside of your own client component and then you can import any UI component from antd. and then you created your own client component you can import it inside the server component and use it.
+For example if you import a component from a third party UI library like antd, MUI, ... that doesn't yet support the app router or this `use client` directive, you can import `use client` inside of your own client component and then you can import any UI component from antd. and then you created your own client component you can import it inside the server component and use it.
 
 And as I mentioned some of these packages are depend on the react global context provider to share these functionality throughout your application.
 
@@ -106,3 +106,61 @@ More two things that I wanted to mention here, we talked about passing props fro
 in server components, there is no need to pass props between themselves for two reasons:
 
 1. First reason, is that if you're fetching data for example inside your layout and you think ok I fetch this data in the layout let me just pass this data to my page component. Now, there is no need to do that. You can co-locate your data fetching with the component that actually needs it, because Next.js behind the scenes is going to deduplicate your requests, so any component can fetch data as it requires without worrying about duplicate requests, because Next.js is going to use fetch-cache, if there is a similar request between the layout or a page so it's not going to call or fetch twice it's going to use that same thing so there's no need to pass this data as props. And for evey other thing for every other thing like logic and functionality you can use the native Javascript modules for sharing these logics between server components. For example if your need to create a connection to your database you can use the Singelton pattern natively in Javascript modules to create a connection to your database and then share it between any other react server components.
+
+For example in the code if you try to use next-themes package ThemeProvider you will get error and it says `createContext` only works in client components. Add the 'use client' directive at the top of the file to use it.
+
+But we know the `root layout` cannot be client component. If this was any other layout besides the root layout we could add 'use client' directive up top of the file.
+
+But we also learned about another pattern and that is to move our client components as further as possible or deeper as possible inside or down in the tree of our components rather than turning the whole layout into a client component.
+
+But you remember I told you can pass server components as children to your client components.
+
+So, to be able to wrap my root layout with for example `next-themes` ThemeProvider. you need to create another file called `providers.tsx` like below and use `use client` and then use it in root layout.
+
+```js
+"use client";
+
+import { ThemeProvider } from "next-themes";
+
+export default function Providers({ children }) {
+  return <ThemeProvider>{children}</ThemeProvider>;
+}
+```
+
+and then in root layout
+
+layout.tsx:
+
+```js
+import "./globals.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import Providers from "./providers";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "Create Next App",
+  description: "Generated by create next app",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode,
+}) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
+}
+```
+
+now, it will work without any issue, because you're passing server components as child to `Providers` which is a client component. and we didn't add 'use client' on top of root layout component.
+
+**Important**
+
+- Next.js is actually pre-renders client components on the server. for a faster experience and then hyderates that HTML with react on the client side. Therefore it also runs this client component on the server.

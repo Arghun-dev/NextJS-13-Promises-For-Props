@@ -1,4 +1,3 @@
-// "use client";
 import { use } from "react";
 
 /**
@@ -11,5 +10,6 @@ export default function FoodList({
   foodsPromise: Promise<string[]>;
 }) {
   const foods = use(foodsPromise);
+
   return <div>{foods.join(", ")}</div>;
 }
