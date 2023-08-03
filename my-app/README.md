@@ -17,4 +17,5 @@ Rule of thumb: always use server components, unless you have a specific reason t
 
 For example in the below example
 
-[Schematic](README.md)
+<img width="841" alt="Screenshot 2023-08-03 at 20 06 24" src="https://github.com/Arghun-dev/NextJS-13-Promises-For-Props/assets/53907570/b2b141b1-e542-4ebd-ae4f-6e057109f52d">
+
