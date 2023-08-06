@@ -164,3 +164,15 @@ now, it will work without any issue, because you're passing server components as
 **Important**
 
 - Next.js is actually pre-renders client components on the server. for a faster experience and then hyderates that HTML with react on the client side. Therefore it also runs this client component on the server.
+
+## Authentication in Next.js
+
+you can use `next-auth` for authentication in Next.js
+
+one very important thing, you just need to add a middleware to protect your pages from unauthorized requests, as you can see I have added a middleware in the root of my application.
+
+Also, you need to wrap your application with SessionProvider which gives your client components access to the session.
+
+You need to add NEXTAUTH_SECRET to your .env.local file and to generate it you need to run `openssl rand -base64 32` command.
+
+If you want to add Guthub or Google, or ... Providers for authentication you need to add ID and SECRET to your .env.local file.
