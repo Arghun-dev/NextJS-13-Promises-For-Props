@@ -74,4 +74,10 @@ This makes the client-side bundle `predictable` and `cachable` which is really h
 
 ### Routing
 
-**Tip: You need export `default` your page component. Otherwise it will not wrok**
+**Tip1: You need export `default` your page component. Otherwise it will not wrok**
+
+**Tip2: Route grouping like (dashboard) will not affect the url path. `(dashboard)/settings/page.tsx` => `/settings`**
+
+Next.js also offers special files to provide unique behaviour to routes, like `layout.tsx` for shared layout among routes, `loading.tsx` for loading state, and `error.tsx` for error handling. These allow you to design comprehensive user experiences with clear feedback mechanisms.
+
+**Tip3: Advanced Routing -> Parallel Routing and Intercepting Routing**
