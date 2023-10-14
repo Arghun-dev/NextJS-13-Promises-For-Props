@@ -61,3 +61,11 @@ But the caveat is, you can't have any interactivity with this component either. 
 But, by having this server component,  it allows us to do like, all the data fetching necessary for a page, imagine a blog page that needs to get the content from a `CMS` you can do that on the server while the component is rendering and send that back to the client without any javascript added to it, so there's no need for the entire bundle of the javascript to download.
 
 **So only the specific components that needs interaction like a form component, only that component could be a client component.**
+
+
+
+### RSC vs. SSR
+
+In contrast, SSR performs server-side rendering only during the initial page load. This means that other than the initial components, all other components are rendered in the browser when SSR is used. So, the browser has to download the JavaScript for the whole app just like in a Single-Page Applications. This makes RSC mode efficient than SSR in terms of performance and user experience.
+
+This makes the client-side bundle `predictable` and `cachable` which is really hard to when bundle sizes always changing, now you don't have to worry about it changing when you add new pages, because those pages don't contribute to the bundle size because they are server components.
