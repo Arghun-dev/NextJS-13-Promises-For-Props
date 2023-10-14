@@ -81,3 +81,58 @@ This makes the client-side bundle `predictable` and `cachable` which is really h
 Next.js also offers special files to provide unique behaviour to routes, like `layout.tsx` for shared layout among routes, `loading.tsx` for loading state, and `error.tsx` for error handling. These allow you to design comprehensive user experiences with clear feedback mechanisms.
 
 **Tip3: Advanced Routing -> Parallel Routing and Intercepting Routing**
+
+
+### Dynamic Routes
+
+1. Single dynamic route `/blog/1`, `/blog/2`
+
+`blog/[id]/page.tsx`:
+
+```js
+interface BlogPageProps {
+  params: {
+    id: string;
+  }
+}
+
+const BlogPage = ({ params }) => {
+  return <div>Blog for: {params.id}</div>
+}
+```
+
+
+2. Catch all dynamic routes `excluding` /blog
+
+`blog/[...id]/page.tsx`
+
+```js
+interface BlogPageProps {
+  params: {
+    id: string[];
+  }
+}
+
+const BlogPage = ({ params }) => {
+  return <div>Blog for: {params.id.toString()}</div>
+}
+```
+
+
+3. Catch all dynamic routes `including` /blog
+
+`blog/[[...id]]/page.tsx`
+
+```js
+interface BlogPageProps {
+  params: {
+    id: string[];
+  }
+}
+
+const BlogPage = ({ params }) => {
+  return <div>Blog for: {params.id.toString()}</div>
+}
+```
+
+To further optimize the dynamic routes, Next.js introduces a `generateStaticParams` function, used in combination with 
