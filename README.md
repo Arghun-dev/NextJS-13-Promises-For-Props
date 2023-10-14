@@ -131,8 +131,8 @@ interface BlogPageProps {
 }
 
 const BlogPage = ({ params }) => {
-  return <div>Blog for: {params.id.toString()}</div>
+  return <div>Blog for: {params.id.join(',')}</div>
 }
 ```
 
-To further optimize the dynamic routes, Next.js introduces a `generateStaticParams` function, used in combination with 
+To further optimize the dynamic routes, Next.js introduces a `generateStaticParams` function, used in combination with dynamic route segments, to generate routes statically at `build time`. This provides the advantage of faster page load times as pages are prerendered and ready to serve, bypassing any real-time computation or data fetching.
