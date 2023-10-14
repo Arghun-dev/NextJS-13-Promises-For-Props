@@ -69,3 +69,9 @@ But, by having this server component,  it allows us to do like, all the data fet
 In contrast, SSR performs server-side rendering only during the initial page load. This means that other than the initial components, all other components are rendered in the browser when SSR is used. So, the browser has to download the JavaScript for the whole app just like in a Single-Page Applications. This makes RSC mode efficient than SSR in terms of performance and user experience.
 
 This makes the client-side bundle `predictable` and `cachable` which is really hard to when bundle sizes always changing, now you don't have to worry about it changing when you add new pages, because those pages don't contribute to the bundle size because they are server components.
+
+
+
+### Routing
+
+**Tip: You need export `default` your page component. Otherwise it will not wrok**
