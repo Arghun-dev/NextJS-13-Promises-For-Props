@@ -42,3 +42,22 @@ Then people got very fancy with like we'll do `code-spilitting` so we split the 
 `But`, are we really solving the problem here? 
 
 So, now this brings us to `React Server Components`
+
+
+
+
+### RSC
+
+RSC is a new way of doing server-side rendering by allowing developers to write components that run on the server and stream their output to the client.
+
+In RSC, there are two types of components: `server components` which can be rendered on the server, and client components, which are rendered on the browser. Server components can be defined as any component that doesn't involve user interactivity like a mouse click or keyboard input or use React hooks like the useState hook and the useEffect hook.
+
+Ther server can render these components and stream them to the browser. The server needs to send the JavaScript code to render only the client components, so the javascript bundle size is going to be a lot smaller and faster to download. This means that the user interface can become interactive faster reducing `TTI`
+
+`Overall`: it's almost like `server-side-rendering` except for the fact that, there's no javascript with the component that sent to the browser, so you can basically run react-server-component entirely without any javascript at all.
+
+But the caveat is, you can't have any interactivity with this component either. You still need client-components for that.
+
+But, by having this server component,  it allows us to do like, all the data fetching necessary for a page, imagine a blog page that needs to get the content from a `CMS` you can do that on the server while the component is rendering and send that back to the client without any javascript added to it, so there's no need for the entire bundle of the javascript to download.
+
+**So only the specific components that needs interaction like a form component, only that component could be a client component.**
