@@ -168,3 +168,21 @@ You just need to create `template.tsx`
 You will almost never use it :)
 
 You will only if want to animate something in or out whenever route changes you will use it. Or if you specifically need your layout to re-render.
+
+
+## Fetching Data
+
+### Server Components
+
+They only execute on the server, you can do `Node` things inside server components.
+
+Server components fetch data on the server. Because these components have not client side JS, they don't fall into the render logic / loop that client components do and instead they work more like regualr js functions. This means we can just async / await a server component to get data.
+
+```js
+const getContent = async () => {
+  const res = await fetch('...')
+  const content = await res.json()
+  return content.homePage
+}
+```
+
