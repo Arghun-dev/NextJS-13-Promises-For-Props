@@ -150,3 +150,10 @@ During static rendering, is a dynamic function or a dynamic `fetch()` request (n
 Dynamic functions rely on information that can only known at request time such as a user's cookies, current request headers, or the URL's search params. Using `cookies()` or `headers()` in a Server Component will opt the whole route into dynamic rendering at request time, while using `useSearchParams()` in Client Components will skip static rendering and instead render all Client Components up to the nearest parent Suspense boundry on the client.
 
 Dynamic data fetches are `fetch()` requests that specifically opt out of caching behavour by setting the cache option to `no-store` or revalidate to 0.
+
+
+## Layouts and Templates
+
+### Layouts
+
+Layouts are components that are shared between different pages. They wrap a page. Useful for common UI elements like navigation components. Layouts are only rendered once, they don't re-render on route changes. To create a layout, it's similar to pages, except creating a page.js you create a `layout.tsx`
