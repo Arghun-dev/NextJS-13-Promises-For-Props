@@ -157,3 +157,14 @@ Dynamic data fetches are `fetch()` requests that specifically opt out of caching
 ### Layouts
 
 Layouts are components that are shared between different pages. They wrap a page. Useful for common UI elements like navigation components. Layouts are only rendered once, they don't re-render on route changes. To create a layout, it's similar to pages, except creating a page.js you create a `layout.tsx`
+
+
+### Templates
+
+Templates are the exact same as Layouts, except they do `re-render` every time a route changes. This is useful for things like enter and exit animations and useEffect logic that happens on render.
+
+You just need to create `template.tsx`
+
+You will almost never use it :)
+
+You will only if want to animate something in or out whenever route changes you will use it. Or if you specifically need your layout to re-render.
