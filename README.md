@@ -186,3 +186,69 @@ const getContent = async () => {
 }
 ```
 
+
+### Client Component
+
+You just need to add `use client` at the top of the component => always use server component unless you need to use browser client features and you need to have user interactions like onclick.
+
+```js
+'use client'
+import { useState } from 'react';
+
+const NewTodoForm = () => {
+  const [state, updateState] = useState('');
+  ...
+}
+
+export default NewTodoForm;
+```
+
+It's exactly like react components. But you need to consider couple of important things:
+
+1. It's normal react client side component, But that doesn't mean that it won't server side render. It still server side render.
+
+For example if you run this code:
+
+```js
+'use client'
+import { useState } from 'react';
+
+const NewTodoForm = () => {
+  console.log("test")
+  const [state, updateState] = useState('');
+  ...
+}
+
+export default NewTodoForm;
+```
+
+You will see the log of `test` will both logs on the server and also on the client. Why?
+
+Because, even though it's a client component, it still renders on the server, that's because there's a difference between server side rendering and react server component, by default Next.js is going to render everything on the server even this client component.
+
+Even in this client compoent we can't just run `console.log(window.localStorage)` we first need to check if we're on the client or not like this:
+
+```js
+'use client'
+import { useState } from 'react';
+
+const NewTodoForm = () => {
+  const [state, updateState] = useState('');
+
+  useEffect(() => {
+    console.log(window.localStorage);
+  }, [])
+
+  ...
+}
+
+export default NewTodoForm;
+```
+
+You can't also pass a prop between client and server component which is `not serializable`
+
+Why? => Because that communication needs to go across the barrier it has to go through the network and going to through the network it needs to be serialized.
+
+**serializable means that you can run `JSON.stringify()` on that prop you pass**
+
+You can't serialize a `function`, `Date`, ...
