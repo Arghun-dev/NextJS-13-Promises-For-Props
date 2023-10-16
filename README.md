@@ -6,6 +6,22 @@ React Server Components (RSC) is a new paradigm introduced in React 18, and Next
 
 
 
+**TIP IMPORTANT**: You `can't` import Server Component to a Client component. So, what should I do, if I want to pass a server component to client component. => `You need to pass a child component` but again you need to have a parent server component to do it like below:
+
+page.tsx
+```js
+import ClientComponent from './client-component';
+import ServerComponent from './server-component';
+
+// Pages in Next.js are server components by default
+export default function Page() {
+  return (
+    <ClientComponent>
+      <ServerComponent />
+    </ClientComponent>
+  )
+}
+```
 
 ### SPA
 
