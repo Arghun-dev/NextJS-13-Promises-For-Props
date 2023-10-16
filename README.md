@@ -455,9 +455,9 @@ export const GET = async (request: Request) => {
 }
 
 export const POST = async (request: Request) => {
-  const body = await request.json()
-  return NextResponse.json({ message: data })
-}
+  const body = await request.json();
+  return NextResponse.json(body);
+};
 ```
 
 So you have don't have to setup `middleware`, no `body-parser` no that stuff. You just write a function and it is free. So it's really cool.
