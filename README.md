@@ -252,3 +252,104 @@ Why? => Because that communication needs to go across the barrier it has to go t
 **serializable means that you can run `JSON.stringify()` on that prop you pass**
 
 You can't serialize a `function`, `Date`, ...
+
+
+## Server Actinos
+
+Server actinos allow us to run code on the server without ever having to setup a new API route ourselves. Depending on how you use a server action, they might work with JS disabled on the browser. Here's how to create a Server Actions.
+
+Server actions is actually running code on the server.
+
+So what is the difference of it with API endpoint? 
+
+- Well, what if you don't have to setup the route yourself, what if that it's setup for you, `you could just call a function, that get's executed on the server, that's basically what server action is, your ability to call a function that gets executed on the server. You don't have to setup API route your self, you don't have to worry about that.`
+
+- And depending on when you use that action, you can actually trigger it without actually using JavaScript in the case like `forms` => So, that means you can have pretty interactive app without any javascript on it.
+
+
+How to create a server action?
+
+If you are in a component:
+  - All you need to do to make a function and use the `use server` directive at the top of that function or in a file that uses the directive at the top, and then you can use that function almost any where
+  - You can do whatever you want in a server action, however, you can't wait for a response to get a return value. This is why server actions are great for performing side effects or any action in which the client isn't waiting for a response.
+  - If you must perform a mutation in your server action, as in you change some data and need that change to be reflected on the screen, you can use `revalidate` to tell Next.js to fetch the data again for that given path:
+  ```js
+    const newTodo = async (data) => {
+      'use server'
+      const todo = data.get('todo');
+      await db.todo.create(todo);
+      revalidate('/todos') // fetch data again on /todos page
+    }
+  ```
+  
+
+```js
+const Home = async () => {
+  const update = async (data) => {
+    'use server'
+    const email = data.get('email')
+    // ...
+  }
+
+  return (
+    <form>
+      <input name="email" type="email" />
+      <button type="submit">Sign Up</button>
+    </form>
+  )
+}
+```
+
+There are other ways to use a server action outside of a form action as well. However, right now, I recommend only using server actions for forms that trigger non mutations on the server.
+
+The clean to write you server actions
+
+create a file of `actions.ts` inside of your `utils` and on top define the directive of `use server` so guarantee that these function are going to be run on the server.
+
+actions.ts
+
+```js
+'use server'
+import db from '@/utils/db';
+
+const createNewTodo = async (formData) => {
+  const todo = await db.todo.create({
+    data: {
+      content: formData.get('content')
+    }
+  })
+}
+```
+
+**IMPORTANT:** The only problem with server actions, unlike API calls where you can make http requests and get the `response` back from the request. Here, you `can't` responde back. So that's very big disadvantage of that.
+
+So, that's why server action is really good for `side effects`, side effect is basically, like if you've ever done analytics, every time you call track, that's a side effect. The app doesn't depend on you calling analytics, it's happening in the background, as the person navigates through the app, you're not sitting and waiting showing a loading spinner to finish it's track, it's just happening on the side, it's a side effect. So, server actions are great for side effects. Things, that have to happen on the server and which the UI and user doesn't need to wait for. Maybe you have some event driven architecture that's handled by web hooks, you can just fire this, that fires web hook, ... 
+
+But if you need to change some data on the backend and you need a response back from it, right now it's just better to do it on the client. You should just make an API call from the frontend.
+
+After you create your todo if you want to check your database you can run this code:
+
+`$ > npx prisma studio`
+
+Now after I created new todo, how to re-fetch new todos:
+
+actions.ts
+
+```js
+'use server'
+
+import { revalidatePath } from 'next/cache';
+import db from './db';
+
+export const createTodo = async (formData) => {
+  const todo = await db.todo.creare({
+    data: {
+      content: formData.get('content')
+    }
+  })
+
+  revalidatePath('/todos')
+}
+```
+
+it's something like soft refresh. It's not refreshing the page, but it's gonna expire the cache of that page and eforces that to re-fetch the data.
