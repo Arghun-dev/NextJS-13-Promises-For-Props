@@ -435,3 +435,29 @@ const Todo = ({ todo }) => {
   return <div onClick={handleClick}>{todo.content}</div>
 };
 ```
+
+
+## API Routes
+
+If you want to have an API for your app. you don't have to create another server or use a background as a language or do any of that stuff you get basically server's routing for free. All you have to do is make a `route`. And now you have an API.
+
+It's pretty simple: just create another special folder called `api` inside `app` folder. And within this folder, it's equivalent to the rest of this folders, you just make a folder represents the route or segment and just define a special file named `route.ts` inside of that folder.
+
+and inside of the `route.ts` all you have to do is just export different HTTP verbs that I want to run when the matching one is requested.
+
+for example we want to have a get request for getting `todos`
+
+`app/api/todos/route.ts`
+
+```js
+export const GET = async (request: Request) => {
+  return NextResponse.json({ message: 'hi' })
+}
+
+export const POST = async (request: Request) => {
+  const body = await request.json()
+  return NextResponse.json({ message: data })
+}
+```
+
+So you have don't have to setup `middleware`, no `body-parser` no that stuff. You just write a function and it is free. So it's really cool.
