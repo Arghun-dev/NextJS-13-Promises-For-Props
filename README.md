@@ -369,3 +369,69 @@ export const createTodo = async (formData) => {
 ```
 
 it's something like soft refresh. It's not refreshing the page, but it's gonna expire the cache of that page and eforces that to re-fetch the data.
+
+
+## Server Action Mutation
+
+Imagine now our Todo component:
+
+```js
+const Todo = ({ todo }) => {
+  return <div>{todo.content}</div>
+}
+```
+
+we want to create another server action in here, but because `Todo` here itself is not a `form` we can't add the server action to the form action because the Todo is not a `form`.
+
+We have to figure out another way to trigger the server action.
+
+In order to do that we need to convert our component to the `client`
+
+```js
+'use client'
+import { useTransition } from 'react';
+
+const Todo = ({ todo }) => {
+  return <div>{todo.content}</div>
+};
+```
+
+`useTransition` is a hook, you can give it a function to run, `async` thing, mostly data loading and basically you tell react this is `not` a priority right now, finish all the important stuff you need to do first before you do this. Do this when you're done.
+
+And we wanna do that, because we don't want to block every other things that heppening in our app.
+
+`actions.ts`
+
+```js
+import db from '@/utils/db';
+import { revalidatePath } from 'next/cache';
+
+export const completeTodo = async (id) => {
+  await db.todo.update({
+    where: { id },
+    data: {
+      completed: true
+    }
+  })
+
+  revalidatePath('/todos')
+}
+```
+
+`Todo.tsx`
+
+```js
+'use client'
+import { useTransition } from 'react';
+import { completeTodo } from '@/utils/actions';
+
+const Todo = ({ todo }) => {
+  const [isPending, startTransition] = useTransition()
+
+  const handleClick = () => {
+    startTransition(() => completeTodo(todo.id))
+  }
+
+  return <div onClick={handleClick}>{todo.content}</div>
+};
+```
